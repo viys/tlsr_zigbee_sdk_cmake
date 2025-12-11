@@ -3,7 +3,8 @@ echo "*****************************************************"
 echo "this is post build!! current configure is :$1"
 
 if [[ $2 = tc32 ]]; then
-	script_dir=../../../tools
+	# script_dir=../../../tools
+	script_dir="$(cd "$(dirname "$0")" && pwd)"
 elif [[ $2 = riscv ]]; then
 	script_dir=$(dirname $(realpath "$0"))
 elif [[ $2 = iot_riscv ]]; then

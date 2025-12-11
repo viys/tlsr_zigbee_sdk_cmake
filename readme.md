@@ -2,6 +2,12 @@
 
 ## **相关文档**
 
+[TelinkIoTStudio_UserGuide_cn.pdf](assets/docs/TelinkIoTStudio_UserGuide_cn.pdf)
+
+[Telink_Zigbee_Overview_CN.pdf](assets/docs/Telink_Zigbee_Overview_CN.pdf)
+
+[AN-19052901-C_Telink Zigbee SDK Developer Manual.pdf](assets/docs/AN-19052901-C_Telink%20Zigbee%20SDK%20Developer%20Manual.pdf)
+
 ## **Telink 创建工程**
 
 ### **修改工程配置文件**

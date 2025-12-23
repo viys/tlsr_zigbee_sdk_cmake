@@ -46,6 +46,7 @@ add_executable(${PROJECT_NAME}.elf ${SOURCES})
 # ------ 头文件路径 ------
 set(INCLUDE_ROOTS
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258
+    # ${CMAKE_CURRENT_SOURCE_DIR}/platform
     ${CMAKE_CURRENT_SOURCE_DIR}/proj
     ${CMAKE_CURRENT_SOURCE_DIR}/zigbee
     ${CMAKE_CURRENT_SOURCE_DIR}/zbhci
@@ -70,6 +71,7 @@ list(APPEND ALL_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/apps/sampleLight
     ${CMAKE_CURRENT_SOURCE_DIR}/apps/common
     ${CMAKE_CURRENT_SOURCE_DIR}/platform
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/riscv
 )
 # 添加 include 路径到 target
 target_include_directories(${PROJECT_NAME}.elf PRIVATE ${ALL_INCLUDE_DIRS})

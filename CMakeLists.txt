@@ -44,7 +44,8 @@ foreach(ASM_FILE IN LISTS SOURCES)
     endif()
 endforeach()
 
-add_executable(${PROJECT_NAME}.elf ${SOURCES})
+# ---------- 创建 target ----------
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 # ------ 头文件路径 ------
 set(INCLUDE_ROOTS
@@ -80,10 +81,10 @@ list(APPEND ALL_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/riscv
 )
 # 添加 include 路径到 target
-target_include_directories(${PROJECT_NAME}.elf PRIVATE ${ALL_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PRIVATE ${ALL_INCLUDE_DIRS})
 
 # ---------- 编译宏 ----------
-target_compile_definitions(${PROJECT_NAME}.elf PRIVATE
+target_compile_definitions(${PROJECT_NAME} PRIVATE
     MCU_CORE_8258=1
     MCU_STARTUP_8258=1
     ROUTER=1
@@ -91,7 +92,7 @@ target_compile_definitions(${PROJECT_NAME}.elf PRIVATE
 )
 
 # ---------- 编译选项 ----------
-target_compile_options(${PROJECT_NAME}.elf PRIVATE
+target_compile_options(${PROJECT_NAME} PRIVATE
     -Wall
     -O2
     -fpack-struct
@@ -113,7 +114,7 @@ set(TELINK_BOOTLOADER_IMAGE 0)      # IS_BOOT_LOADER_IMAGE
 set(TELINK_RAMCODE_MAX 0)           # RESV_FOR_APP_RAM_CODE_SIZE
 set(TELINK_FW_OFFSET 0x0000)        # APP_IMAGE_ADDR
 
-target_link_options(${PROJECT_NAME}.elf PRIVATE
+target_link_options(${PROJECT_NAME} PRIVATE
     # -T${CMAKE_CURRENT_SOURCE_DIR}/platform/boot/8258/boot_8258.link
     -T${CMAKE_CURRENT_SOURCE_DIR}/boot.link
     -Wl,-Map=${PROJECT_NAME}.map
@@ -132,7 +133,7 @@ link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/riscv
 )
 
-target_link_libraries(${PROJECT_NAME}.elf PRIVATE
+target_link_libraries(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/tc32/libsoft-fp.a
     ${CMAKE_CURRENT_SOURCE_DIR}/zigbee/lib/tc32/libzb_router.a
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/lib/libdrivers_8258.a
@@ -140,7 +141,7 @@ target_link_libraries(${PROJECT_NAME}.elf PRIVATE
 )
 
 # ---------- 生成 bin / lst ----------
-add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
     COMMAND ${CMAKE_OBJDUMP} -D ${PROJECT_NAME}.elf > ${PROJECT_NAME}.lst
     COMMAND ${CMAKE_SIZE} ${PROJECT_NAME}.elf

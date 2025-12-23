@@ -4,16 +4,16 @@ project(tlsr C ASM)
 # set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
 # ---------- 工具链 ----------
-set(TOOLPATH "tc32-elf-")
+set(TOOLPATH "${CMAKE_CURRENT_SOURCE_DIR}/toolchain/tc32/bin/tc32-elf-")
 
 set(CMAKE_SYSTEM_NAME Generic)
-set(CMAKE_C_COMPILER     ${TOOLPATH}gcc)
-set(CMAKE_ASM_COMPILER   ${TOOLPATH}gcc)
-set(CMAKE_AR             ${TOOLPATH}ar)
-set(CMAKE_OBJCOPY        ${TOOLPATH}objcopy)
-set(CMAKE_OBJDUMP        ${TOOLPATH}objdump)
-set(CMAKE_SIZE           ${TOOLPATH}size)
-set(CMAKE_STRIP          ${TOOLPATH}strip)
+set(CMAKE_C_COMPILER     ${TOOLPATH}gcc.exe)
+set(CMAKE_ASM_COMPILER   ${TOOLPATH}gcc.exe)
+set(CMAKE_AR             ${TOOLPATH}ar.exe)
+set(CMAKE_OBJCOPY        ${TOOLPATH}objcopy.exe)
+set(CMAKE_OBJDUMP        ${TOOLPATH}objdump.exe)
+set(CMAKE_SIZE           ${TOOLPATH}size.exe)
+set(CMAKE_STRIP          ${TOOLPATH}strip.exe)
 
 # ---------- 避免自动链接 stdlib ----------
 set(CMAKE_C_STANDARD_LIBRARIES "")

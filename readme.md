@@ -21,37 +21,19 @@
 
 ```
 tlsr_zigbee_sdk_cmake/
-├── CMakeLists.txt              # 顶层调度
+├── CMakeLists.txt          # 顶层调度
 ├── cmake/
-│   ├── toolchain-tc32.cmake    # 工具链（强烈推荐拆出来）
-│   ├── telink-common.cmake     # 公共编译/链接规则
+│   ├── common.cmake        # 公共编译/链接规则
+│   ├── functions.cmake     # 自定义函数
+│   ├── options.cmake       # 编译选项 / 宏
+│   └── toolchain.cmake     # 工具链（强烈推荐拆出来）
 │
-├── platform/
-│   ├── boot/8258/
-│   │   ├── cstartup_8258.S     # 你已经有，✔
-│   │   ├── boot_8258.link      # 链接脚本，✔
-│   │
-│   ├── chip_8258/
-│   │   ├── flash/
-│   │   ├── irq.c
-│   │   └── ...
-│   │
-│   ├── lib/
-│   │   └── libdrivers_8258.a
+├── tl_zigbee_sdk
 │
-├── zigbee/
-│   ├── lib/tc32/
-│   │   └── libzb_router.a
-│   └── ...
+├── project
 │
-├── apps/
-│   └── sampleLight/
-│       └── app_main.c
-│
-├── proj/
-│   └── project_config.h
-│
-├── build/                       # out-of-tree build
+├── build/                  # out-of-tree build
+└ ...
 ```
 
 这个结构的核心思想只有一句话：

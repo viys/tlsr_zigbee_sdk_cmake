@@ -1,0 +1,35 @@
+include(${CMAKE_SCRIPT_DIR}/functions.cmake)
+
+set(CMAKE_SDK_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tl_zigbee_sdk)
+set(TELINK_LINKER_SCRIPT ${CMAKE_SDK_SOURCE_DIR}/platform/boot/8258/boot_8258.link)
+
+set(TELINK_LINK_FILE link_trsl8285.cmake)
+
+set(TELINK_EQUIP_TYPE ZR)              # ZR, ZC, ZED
+
+# 相关编译宏
+set(TELINK_COMPILE_DEFINITIONS
+    MCU_CORE_8258=1
+    MCU_STARTUP_8258=1
+    ROUTER=1
+    __PROJECT_TL_DIMMABLE_LIGHT__=1
+)
+
+set(TELINK_BOOTLOADER_IMAGE 0)      # 0: Application, 1: BootLoader
+if(TELINK_BOOTLOADER_IMAGE)         # BootLoader
+    set(TELINK_RAMCODE_MAX 0x2000)  # RESV_FOR_APP_RAM_CODE_SIZE
+    set(TELINK_FW_OFFSET 0x8000)    # APP_IMAGE_ADDR
+else()                              # Application
+    set(TELINK_RAMCODE_MAX 0)
+    set(TELINK_FW_OFFSET 0x0000)
+endif()
+
+check_vars(
+    TELINK_EQUIP_TYPE
+    TELINK_BOOTLOADER_IMAGE
+    TELINK_RAMCODE_MAX
+    TELINK_FW_OFFSET
+    TELINK_COMPILE_DEFINITIONS
+    TELINK_LINK_FILE
+    TELINK_LINKER_SCRIPT
+)

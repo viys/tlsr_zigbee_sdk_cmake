@@ -1,7 +1,4 @@
 cmake_minimum_required(VERSION 3.10)
-project(tlsr C ASM)
-
-# set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
 # ---------- 工具链 ----------
 set(TOOLPATH "${CMAKE_CURRENT_SOURCE_DIR}/toolchain/tc32/bin/tc32-elf-")
@@ -15,11 +12,14 @@ set(CMAKE_OBJDUMP        ${TOOLPATH}objdump.exe)
 set(CMAKE_SIZE           ${TOOLPATH}size.exe)
 set(CMAKE_STRIP          ${TOOLPATH}strip.exe)
 
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+
 # ---------- 避免自动链接 stdlib ----------
 set(CMAKE_C_STANDARD_LIBRARIES "")
 set(CMAKE_CXX_STANDARD_LIBRARIES "")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -nostdlib -nostartfiles -nodefaultlibs")
 set(CMAKE_C_STANDARD 99)
+
+project(tlsr C ASM)
 
 # ---------- 源文件 ----------
 file(GLOB_RECURSE SOURCES
@@ -35,6 +35,7 @@ file(GLOB_RECURSE SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/zbhci/*.c
 
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258/flash/*.c
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/services/b85m/*.c
 )
 
@@ -49,9 +50,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 # ------ 头文件路径 ------
 set(INCLUDE_ROOTS
-    # ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258
-    # ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258/flash
-    # ${CMAKE_CURRENT_SOURCE_DIR}/platform
+    ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258
     ${CMAKE_CURRENT_SOURCE_DIR}/proj
     ${CMAKE_CURRENT_SOURCE_DIR}/zigbee
     ${CMAKE_CURRENT_SOURCE_DIR}/zbhci
@@ -76,8 +75,6 @@ list(APPEND ALL_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/apps/sampleLight
     ${CMAKE_CURRENT_SOURCE_DIR}/apps/common
     ${CMAKE_CURRENT_SOURCE_DIR}/platform
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258/flash
     ${CMAKE_CURRENT_SOURCE_DIR}/platform/riscv
 )
 # 添加 include 路径到 target
@@ -115,8 +112,9 @@ set(TELINK_RAMCODE_MAX 0)           # RESV_FOR_APP_RAM_CODE_SIZE
 set(TELINK_FW_OFFSET 0x0000)        # APP_IMAGE_ADDR
 
 target_link_options(${PROJECT_NAME} PRIVATE
-    # -T${CMAKE_CURRENT_SOURCE_DIR}/platform/boot/8258/boot_8258.link
-    -T${CMAKE_CURRENT_SOURCE_DIR}/boot.link
+    # -T${CMAKE_CURRENT_SOURCE_DIR}/boot.link
+    -T${CMAKE_CURRENT_SOURCE_DIR}/platform/boot/8258/boot_8258.link
+    -nostdlib -nostartfiles -nodefaultlibs
     -Wl,-Map=${PROJECT_NAME}.map
     -Wl,--gc-sections
     -static
@@ -142,7 +140,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 # ---------- 生成 bin / lst ----------
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_OBJCOPY} -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin
-    COMMAND ${CMAKE_OBJDUMP} -D ${PROJECT_NAME}.elf > ${PROJECT_NAME}.lst
-    COMMAND ${CMAKE_SIZE} ${PROJECT_NAME}.elf
+    COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin
+    COMMAND ${CMAKE_OBJDUMP} -D $<TARGET_FILE:${PROJECT_NAME}> > ${PROJECT_NAME}.lst
+    COMMAND ${CMAKE_SIZE} $<TARGET_FILE:${PROJECT_NAME}>
 )

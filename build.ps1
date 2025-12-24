@@ -57,5 +57,5 @@ try {
         }
     }
 } finally {
-    if (Test-Path $buildPath) { Pop-Location }
+    Pop-Location
 }

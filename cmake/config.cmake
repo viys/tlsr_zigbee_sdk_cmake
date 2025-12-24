@@ -1,14 +1,16 @@
-include(${CMAKE_SCRIPT_DIR}/functions.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/functions.cmake)
 
+set(CMAKE_SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_PROJ_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/project)
 set(CMAKE_SDK_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tl_zigbee_sdk)
 set(TELINK_LINKER_SCRIPT ${CMAKE_SDK_SOURCE_DIR}/platform/boot/8258/boot_8258.link)
 
+set(TELINK_MCU_CORE 8258)
 set(TELINK_LINK_FILE link_trsl8285.cmake)
 
-set(TELINK_EQUIP_TYPE ZR)              # ZR, ZC, ZED
+set(TELINK_EQUIP_TYPE ZR)           # ZR, ZC, ZED
 
-# 相关编译宏
-set(TELINK_COMPILE_DEFINITIONS
+set(TELINK_COMPILE_DEFINITIONS      # 相关编译宏
     MCU_CORE_8258=1
     MCU_STARTUP_8258=1
     ROUTER=1

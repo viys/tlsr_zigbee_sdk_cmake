@@ -1,4 +1,4 @@
-# toolchain.cmake
+# toolchain_tc32.cmake
 # 用于设置 TC32 编译器工具链
 
 # 设置交叉编译器路径

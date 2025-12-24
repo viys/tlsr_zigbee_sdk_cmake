@@ -14,7 +14,8 @@ function Ensure-BuildDirectory {
 }
 
 function Run-CMake {
-    $cmakeCmd = "cmake -G `"Unix Makefiles`" -DCMAKE_TOOLCHAIN_FILE=`"$toolChainFile`" .."
+    # 注意：这里可以更改主 CMakeLists.txt 中的 config.cmake 路径，通过 -C 参数来灵活适配编译
+    $cmakeCmd = "cmake -G `"Unix Makefiles`" .."
     Invoke-Expression $cmakeCmd
 }
 
@@ -25,6 +26,11 @@ function Run-Make {
     $cmd = "cmake --build ."
     if ($Target) { $cmd += " --target $Target" }
     Invoke-Expression $cmd
+
+    if (-not $Target) {
+        $now = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        Write-Host "Build time: $now"
+    }
 }
 
 Push-Location

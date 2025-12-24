@@ -7,6 +7,9 @@ set(TELINK_LINKER_SCRIPT ${CMAKE_SDK_SOURCE_DIR}/platform/boot/8258/boot_8258.li
 
 set(TELINK_MCU_CORE 8258)
 set(TELINK_LINK_FILE link_trsl8285.cmake)
+set(TELINK_TOOLCHAIN_FILE toolchain_tc32.cmake)
+
+set(TELINK_PROJECT_NAME sampleLight)
 
 set(TELINK_EQUIP_TYPE ZR)           # ZR, ZC, ZED
 

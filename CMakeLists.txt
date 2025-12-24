@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
 # ---------- 工具链 ----------
+set(CMAKE_SDK_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tl_zigbee_sdk)
+set(CMAKE_PROJ_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/project)
 set(TOOLPATH "${CMAKE_CURRENT_SOURCE_DIR}/toolchain/tc32/bin/tc32-elf-")
 
 set(CMAKE_SYSTEM_NAME Generic)
@@ -23,20 +25,20 @@ project(tlsr C ASM)
 
 # ---------- 源文件 ----------
 file(GLOB_RECURSE SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/boot/8258/link_cfg.S
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/boot/8258/cstartup_8258.S
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/tc32/div_mod.S
+    ${CMAKE_PROJ_SOURCE_DIR}/sampleLight/*.c
+    ${CMAKE_PROJ_SOURCE_DIR}/common/*.c
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/apps/sampleLight/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/apps/common/*.c
+    ${CMAKE_SDK_SOURCE_DIR}/platform/boot/8258/link_cfg.S
+    ${CMAKE_SDK_SOURCE_DIR}/platform/boot/8258/cstartup_8258.S
+    ${CMAKE_SDK_SOURCE_DIR}/platform/tc32/div_mod.S
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/proj/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/zigbee/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/zbhci/*.c
+    ${CMAKE_SDK_SOURCE_DIR}/proj/*.c
+    ${CMAKE_SDK_SOURCE_DIR}/zigbee/*.c
+    ${CMAKE_SDK_SOURCE_DIR}/zbhci/*.c
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258/flash/*.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/services/b85m/*.c
+    ${CMAKE_SDK_SOURCE_DIR}/platform/chip_8258/*.c
+    ${CMAKE_SDK_SOURCE_DIR}/platform/chip_8258/flash/*.c
+    ${CMAKE_SDK_SOURCE_DIR}/platform/services/b85m/*.c
 )
 
 foreach(ASM_FILE IN LISTS SOURCES)
@@ -50,10 +52,10 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 # ------ 头文件路径 ------
 set(INCLUDE_ROOTS
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/chip_8258
-    ${CMAKE_CURRENT_SOURCE_DIR}/proj
-    ${CMAKE_CURRENT_SOURCE_DIR}/zigbee
-    ${CMAKE_CURRENT_SOURCE_DIR}/zbhci
+    ${CMAKE_SDK_SOURCE_DIR}/platform/chip_8258
+    ${CMAKE_SDK_SOURCE_DIR}/proj
+    ${CMAKE_SDK_SOURCE_DIR}/zigbee
+    ${CMAKE_SDK_SOURCE_DIR}/zbhci
 )
 
 # 遍历每个根目录，递归添加所有子目录到 include
@@ -72,10 +74,10 @@ foreach(root ${INCLUDE_ROOTS})
 endforeach()
 
 list(APPEND ALL_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/apps/sampleLight
-    ${CMAKE_CURRENT_SOURCE_DIR}/apps/common
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/riscv
+    ${CMAKE_PROJ_SOURCE_DIR}/sampleLight
+    ${CMAKE_PROJ_SOURCE_DIR}/common
+    ${CMAKE_SDK_SOURCE_DIR}/platform
+    ${CMAKE_SDK_SOURCE_DIR}/platform/riscv
 )
 # 添加 include 路径到 target
 target_include_directories(${PROJECT_NAME} PRIVATE ${ALL_INCLUDE_DIRS})
@@ -113,7 +115,7 @@ set(TELINK_FW_OFFSET 0x0000)        # APP_IMAGE_ADDR
 
 target_link_options(${PROJECT_NAME} PRIVATE
     # -T${CMAKE_CURRENT_SOURCE_DIR}/boot.link
-    -T${CMAKE_CURRENT_SOURCE_DIR}/platform/boot/8258/boot_8258.link
+    -T${CMAKE_SDK_SOURCE_DIR}/platform/boot/8258/boot_8258.link
     -nostdlib -nostartfiles -nodefaultlibs
     -Wl,-Map=${PROJECT_NAME}.map
     -Wl,--gc-sections
@@ -126,16 +128,16 @@ target_link_options(${PROJECT_NAME} PRIVATE
 
 # ---------- 链接库路径 ----------
 link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/zigbee/lib/tc32
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/riscv
+    ${CMAKE_SDK_SOURCE_DIR}/zigbee/lib/tc32
+    ${CMAKE_SDK_SOURCE_DIR}/platform/lib
+    ${CMAKE_SDK_SOURCE_DIR}/platform/riscv
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/tc32/libsoft-fp.a
-    ${CMAKE_CURRENT_SOURCE_DIR}/zigbee/lib/tc32/libzb_router.a
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/lib/libdrivers_8258.a
-    ${CMAKE_CURRENT_SOURCE_DIR}/platform/riscv/libfirmware_encrypt.a
+    ${CMAKE_SDK_SOURCE_DIR}/platform/tc32/libsoft-fp.a
+    ${CMAKE_SDK_SOURCE_DIR}/zigbee/lib/tc32/libzb_router.a
+    ${CMAKE_SDK_SOURCE_DIR}/platform/lib/libdrivers_8258.a
+    ${CMAKE_SDK_SOURCE_DIR}/platform/riscv/libfirmware_encrypt.a
 )
 
 # ---------- 生成 bin / lst ----------

@@ -8,19 +8,23 @@ else()
     message(FATAL_ERROR "Unknown MCU ARCH")
 endif()
 
-file(GLOB_RECURSE SDK_SOURCES_VAR
+file(GLOB_RECURSE SDK_SOURCES_PLATFORM_VAR
     "${CMAKE_SDK_SOURCE_DIR}/platform/boot/${MCU_ARCH}/link_cfg.S"
     "${CMAKE_SDK_SOURCE_DIR}/platform/boot/${MCU_ARCH}/cstartup_${MCU_ARCH}.S"
     "${CMAKE_SDK_SOURCE_DIR}/platform/tc32/div_mod.S"
+    "${CMAKE_SDK_SOURCE_DIR}/platform/chip_${MCU_ARCH}/*.c"
+    "${CMAKE_SDK_SOURCE_DIR}/platform/services/b85m/*.c"
+)
 
+# list(FILTER SDK_SOURCES_PLATFORM_VAR EXCLUDE REGEX ".*/chip_${MCU_ARCH}/flash/.*")
+
+file(GLOB_RECURSE SDK_SOURCES_GENERAL_VAR
     "${CMAKE_SDK_SOURCE_DIR}/proj/*.c"
     "${CMAKE_SDK_SOURCE_DIR}/zigbee/*.c"
     "${CMAKE_SDK_SOURCE_DIR}/zbhci/*.c"
-
-    "${CMAKE_SDK_SOURCE_DIR}/platform/chip_${MCU_ARCH}/*.c"
-    "${CMAKE_SDK_SOURCE_DIR}/platform/chip_${MCU_ARCH}/flash/*.c"
-    "${CMAKE_SDK_SOURCE_DIR}/platform/services/b85m/*.c"
 )
+
+# message(STATUS "SDK sources: ${SDK_SOURCES_PLATFORM_VAR}")
 
 set(INCLUDE_ROOTS
     ${CMAKE_SDK_SOURCE_DIR}/platform/chip_8258
@@ -51,5 +55,5 @@ set(SDK_INCLUDES_VAR
 )
 
 # Propagate these variables to the parent scope.
-set(SDK_SOURCES ${SDK_SOURCES_VAR} PARENT_SCOPE)
+set(SDK_SOURCES ${SDK_SOURCES_GENERAL_VAR} ${SDK_SOURCES_PLATFORM_VAR} PARENT_SCOPE)
 set(SDK_INCLUDES ${SDK_INCLUDES_VAR} PARENT_SCOPE)

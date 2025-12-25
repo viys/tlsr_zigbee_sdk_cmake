@@ -307,7 +307,7 @@ __attribute__((weak)) void flash_write_status(flash_status_typedef_e type , unsi
 	}
 }
 
-#if 1
+#if 0
 /**
  * @brief 		This function serves to read data from the Security Registers of the flash.
  * @param[in]   addr	- the start address of the Security Registers.

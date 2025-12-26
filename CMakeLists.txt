@@ -30,11 +30,6 @@ target_link_options(${PROJECT_NAME} PRIVATE -Wl,-Map=${PROJECT_NAME}.map ${TELIN
 # 链接库路径
 target_link_libraries(${PROJECT_NAME} PRIVATE ${TELINK_LIBS})
 
-check_vars(
-    TELINK_COMPILE_DEFINITIONS
-    TELINK_LINK_FLAGS
-)
-
 # 生成 bin / lst
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -v -O binary $<TARGET_FILE:${PROJECT_NAME}> ${PROJECT_NAME}.bin

@@ -1,3 +1,5 @@
+# 用于链接相关配置
+
 set(TELINK_LINK_FLAGS
     -T${TELINK_LINKER_SCRIPT}
     -nostdlib -nostartfiles -nodefaultlibs
@@ -36,5 +38,3 @@ set(TELINK_LIBS
     ${TELINK_LIB_PLATFORM}
     ${TELINK_LIB_ZB}
 )
-
-

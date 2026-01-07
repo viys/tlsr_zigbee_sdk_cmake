@@ -4,6 +4,7 @@
 # 系统类型
 set(CMAKE_SYSTEM_NAME Generic)
 
+# 拼接编译器路径
 set(CMAKE_C_COMPILER     "${TELINK_TOOLCHAIN_PATH}gcc.exe")
 set(CMAKE_ASM_COMPILER   "${TELINK_TOOLCHAIN_PATH}gcc.exe")
 set(CMAKE_AR             "${TELINK_TOOLCHAIN_PATH}ar.exe")
@@ -27,7 +28,6 @@ set(DEFAULT_COMPILE_OPTIONS
     -fshort-wchar
     -fms-extensions
     -std=gnu99
-# AI 提取的缺少的编译选项
     -ffunction-sections
     -fdata-sections
 )
